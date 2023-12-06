@@ -4,7 +4,7 @@ require_relative "base"
 
 module ComThetrainline
   module Services
-    # FetchJourneys fetches the journes from thetrailine.com
+    # FormatResult formats the result fetched from thetrainline.com
     class FormatResult < Base
       FARE_TYPE_COMFORT_MAPPING = {
         "urn:trainline:sncf:fare:25ee315b0ac945adce4b429e19396c94" => 1,

@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-RSpec.describe ComThetrainline::Services::FetchJourneys do # rubocop:disable Metrics/BlockLength
+RSpec.describe ComThetrainline::Services::FetchJourneysByName do # rubocop:disable Metrics/BlockLength
   subject(:fetch_journeys_call) do
     described_class.new.call(from: from, to: to, departure_at: departure_at)
   end
@@ -13,7 +13,7 @@ RSpec.describe ComThetrainline::Services::FetchJourneys do # rubocop:disable Met
 
   before do
     stub_const("ComThetrainline::BASE_URL", "http://example.com")
-    stub_const("ComThetrainline::Services::FetchJourneys::WEBSITE_URI", "/website_uri")
+    stub_const("ComThetrainline::Services::FetchJourneysByName::WEBSITE_URI", "/website_uri")
 
     allow(Selenium::WebDriver).to receive(:for).and_return(driver)
     allow(driver).to receive(:get)

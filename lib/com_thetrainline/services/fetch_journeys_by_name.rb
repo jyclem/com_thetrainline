@@ -6,7 +6,7 @@ require "selenium-webdriver"
 
 module ComThetrainline
   module Services
-    # FetchJourneys fetches the journeys from thetrailine.com
+    # FetchJourneysByName fetches the journeys from thetrailine.com
     #
     # Instead of going onto the welcome page of thetrainline.com and fill the form, we could also go directly
     # go to a dynamically made URL such as the following one and intercept the /api/journey-search/ request right away:
@@ -17,7 +17,7 @@ module ComThetrainline
     # "outwardDateType=departAfter&selectedTab=train&selectExactTime=true&splitSave=true&lang=fr&" \
     # However, in this case we need to know the code numbers of the origin and destination city (ex: 4920, 8276, ...)
     # which is less user friendly, that is why I chose the option to go through the form (but takes more time of course)
-    class FetchJourneys < Base
+    class FetchJourneysByName < Base
       WEBSITE_URI = "/en-us"
       SEARCH_URI = "/api/journey-search/"
 

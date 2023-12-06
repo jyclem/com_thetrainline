@@ -7,7 +7,11 @@ bin/console
 
 Then within the console:
 ```
-ComThetrainline.find("Berlin", "Munich", DateTime.now)
+ComThetrainline.find("3358", "5097", DateTime.now)
+
+# or using cities names
+
+ComThetrainline.find_by_name("Berlin", "Munich", DateTime.now)
 
 # or if the fetch is blocked by the website security you can see an example of the result with:
 
