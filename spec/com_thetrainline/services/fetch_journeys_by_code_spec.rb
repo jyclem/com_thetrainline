@@ -16,6 +16,37 @@ RSpec.describe ComThetrainline::Services::FetchJourneysByCode do # rubocop:disab
 
   it { is_expected.to eql(json: "result") }
 
+  it "calls Net::HTTP.post with the right parameters" do # rubocop:disable Metrics/BlockLength
+    fetch_journeys_call
+
+    expect(Net::HTTP).to have_received(:post).with(
+      URI("https://www.thetrainline.com//api/journey-search/"),
+      {
+        cards: [],
+        type: "single",
+        maximumJourneys: 5,
+        transportModes: %w[mixed],
+        composition: %w[through interchangeSplit],
+        requestedCurrencyCode: "EUR",
+        isEurope: true,
+        includeRealtime: true,
+        directSearch: false,
+        transitDefinitions: [
+          {
+            direction: "outward",
+            origin: "urn:trainline:generic:loc:3358",
+            destination: "urn:trainline:generic:loc:5097",
+            journeyDate: {
+              type: "departAfter",
+              time: "2023-12-03T15:30:00+00:00"
+            }
+          }
+        ]
+      }.to_json,
+      { Accept: "application/json" }
+    )
+  end
+
   context "when the JSON post raises an exception" do
     let(:exception) { SocketError.new("any error") }
 

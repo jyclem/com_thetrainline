@@ -7,6 +7,16 @@ module ComThetrainline
     # FetchJourneysByCode fetches the journeys from thetrailine.com
     class FetchJourneysByCode < Base
       SEARCH_URI = "/api/journey-search/"
+
+      JOURNEY_DATE = {
+        type: "departAfter", time: nil
+      }.freeze
+      TRANSIT_DEFINITION = {
+        direction: "outward",
+        origin: nil,
+        destination: nil,
+        journeyDate: JOURNEY_DATE
+      }.freeze
       BODY = {
         cards: [],
         type: "single",
@@ -14,7 +24,10 @@ module ComThetrainline
         transportModes: ["mixed"],
         composition: %w[through interchangeSplit],
         requestedCurrencyCode: "EUR",
-        isEurope: true, includeRealtime: true, directSearch: false
+        isEurope: true,
+        includeRealtime: true,
+        directSearch: false,
+        transitDefinitions: [TRANSIT_DEFINITION]
       }.freeze
 
       def call(from:, to:, departure_at:)
@@ -35,22 +48,19 @@ module ComThetrainline
       end
 
       def fetch_journeys_response
-        Net::HTTP.post(
-          URI("#{BASE_URL}/#{SEARCH_URI}"),
-          BODY.merge(transitDefinitions: transit_definitions).to_json,
-          { Accept: "application/json" }
-        )
+        Net::HTTP.post(URI("#{BASE_URL}/#{SEARCH_URI}"), body.to_json, { Accept: "application/json" })
       end
 
-      def transit_definitions
-        [
-          {
-            direction: "outward",
-            origin: "urn:trainline:generic:loc:#{@from}",
-            destination: "urn:trainline:generic:loc:#{@to}",
-            journeyDate: { type: "departAfter", time: @departure_at.iso8601 }
-          }
-        ]
+      def body
+        BODY.merge(
+          transitDefinitions: [
+            TRANSIT_DEFINITION.merge(
+              origin: "urn:trainline:generic:loc:#{@from}",
+              destination: "urn:trainline:generic:loc:#{@to}",
+              journeyDate: JOURNEY_DATE.merge(time: @departure_at.iso8601)
+            )
+          ]
+        )
       end
     end
   end
